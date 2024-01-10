@@ -36,7 +36,7 @@ def random_paddle_collision_ball_speed(previous_ball_speed: tuple[float, float]
     :param tuple[float, float] previous_ball_speed: The previous ball speed
     :returns tuple[float, float]: The new ball speed
     """
-    x_multiplier = random.uniform(0.95, 1.15)
+    x_multiplier = random.uniform(0.95, 1.25)
     return (
         previous_ball_speed[0] * -1 * x_multiplier,
         previous_ball_speed[1] * random.choice((-1, 1)) * x_multiplier * 0.8
