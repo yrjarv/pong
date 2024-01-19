@@ -32,14 +32,16 @@ def random_paddle_collision_ball_speed(previous_ball_speed: tuple[float, float]
                                        ) -> tuple[float, float]:
     """
     Generates a tuple with two numbers that are the result of random\
-    multiplication of the previous ball speed.
+    multiplication of the previous ball speed. The new ball speed has a 2/3\
+    chance of being in the same direction as the previous, leading to more\
+    unpredictable and non-repetetive gameplay.
     :param tuple[float, float] previous_ball_speed: The previous ball speed
     :returns tuple[float, float]: The new ball speed
     """
     x_multiplier = random.uniform(0.95, 1.25)
     return (
         previous_ball_speed[0] * -1 * x_multiplier,
-        previous_ball_speed[1] * random.choice((-1, 1)) * x_multiplier * 0.8
+        previous_ball_speed[1] * random.choice((-1, 1, 1)) * x_multiplier * 0.8
     )
 
 # Initialize pygame, set up window and tick speed
