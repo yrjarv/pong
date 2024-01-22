@@ -44,6 +44,20 @@ def random_paddle_collision_ball_speed(previous_ball_speed: tuple[float, float]
         previous_ball_speed[1] * random.choice((-1, 1, 1)) * x_multiplier * 0.8
     )
 
+def draw_all_objects() -> None:
+    """
+    Draws all the paddles and the ball. Also updates the score text.
+    """
+    for paddle in paddles:
+        paddle.draw()
+    ball.draw()
+    text = font.render(f'{player_scores[0]} : {player_scores[1]}', True,
+                       GAMECOLOR)
+    text_rect = text.get_rect(center=(window.get_width()/2, 50))
+    window.blit(text, text_rect)
+    pygame.display.update()
+    window.fill(BACKGROUNDCOLOR)
+
 # Initialize pygame, set up window and tick speed
 pygame.init()
 pygame.time.Clock().tick(TPS)
@@ -95,16 +109,7 @@ while True:
         ball.position = [window.get_width()/2, window.get_height()/2]
         ball_speed = random_start_ball_speed()
 
-    # Draw all objects and update score text
-    for paddle in paddles:
-        paddle.draw()
-    ball.draw()
-    text = font.render(f'{player_scores[0]} : {player_scores[1]}', True,
-                       GAMECOLOR)
-    text_rect = text.get_rect(center=(window.get_width()/2, 50))
-    window.blit(text, text_rect)
-    pygame.display.update()
-    window.fill(BACKGROUNDCOLOR)
+    draw_all_objects()
 
     # Quit if esc is pressed, done after the rendering to ensure that all
     # objects are still drawn
