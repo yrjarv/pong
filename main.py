@@ -23,9 +23,11 @@ def random_start_ball_speed() -> tuple[float, float]:
     the ball's speed.
     :returns tuple[float, float]: The vector of the ball's speed
     """
+    desired_ratio = 0.6
+    x_multiplier = random.uniform(0.15, 0.35)
     return (
-        random.choice([-1, 1]) * random.uniform(0.3, 0.75) * 0.5,
-        random.choice([-1, 1]) * random.uniform(0.1, 0.3)
+        random.choice([-1, 1]) * x_multiplier,
+        random.choice([-1, 1]) * desired_ratio*x_multiplier
     )
 
 def random_paddle_collision_ball_speed(previous_ball_speed: tuple[float, float]
@@ -41,7 +43,7 @@ def random_paddle_collision_ball_speed(previous_ball_speed: tuple[float, float]
     x_multiplier = random.uniform(0.95, 1.25)
     return (
         previous_ball_speed[0] * -1 * x_multiplier,
-        previous_ball_speed[1] * random.choice((-1, 1, 1)) * x_multiplier * 0.8
+        previous_ball_speed[1] * random.choice((-1, 1, 1)) * x_multiplier * 0.5
     )
 
 def draw_all_objects() -> None:
@@ -91,6 +93,24 @@ while True:
         paddles[1].move(-PADDLE_SPEED)
     if keys[pygame.K_DOWN]:
         paddles[1].move(PADDLE_SPEED)
+
+    # Preventing too much or too little bouncing
+    ratio = abs(ball_speed[1]/ball_speed[0])
+    if ratio < 0.3:
+        print('<.3')
+        ball_speed = (ball_speed[0], ball_speed[1]*3)
+        draw_all_objects()
+        continue
+    if ratio > 1:
+        print('>1')
+        ball_speed = (ball_speed[0], ball_speed[1]/2)
+        draw_all_objects()
+        continue
+    if abs(ratio - window.get_width()/window.get_height()) < 0.3:
+        print('Diagonal')
+        ball_speed = (ball_speed[0]*1.2, ball_speed[1])
+        draw_all_objects()
+        continue
 
     # Movement and multiplication/randomisation of speed
     if ball.collision_wall():
