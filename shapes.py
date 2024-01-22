@@ -38,7 +38,7 @@ class Paddle:
                              self.dimensions[0], self.dimensions[1])
                         )
 
-    def collision_with_wall(self, added_distance: float) -> bool:
+    def collision_wall(self, added_distance: float) -> bool:
         """
         Checks if the paddle collides with the top or bottom of the screen
         :return: True if the paddle collides with the top or bottom of the\
@@ -54,7 +54,7 @@ class Paddle:
         make it collide witht the walls
         :param float distance: How much the paddle should move
         """
-        if not self.collision_with_wall(distance):
+        if not self.collision_wall(distance):
             self.position[1] += distance
         self.draw()
 
@@ -115,8 +115,8 @@ class Ball:
         screen, False otherwise
         """
         return (
-            self.position[1] <= 0 # top
-            or self.position[1] >= self.window.get_height() # bottom
+            self.position[1] <= 10 # top
+            or self.position[1] >= self.window.get_height()-10 # bottom
         )
 
     def move(self, distance: tuple[float, float]) -> None:
