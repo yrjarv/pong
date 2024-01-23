@@ -97,17 +97,14 @@ while True:
     # Preventing too much or too little bouncing
     ratio = abs(ball_speed[1]/ball_speed[0])
     if ratio < 0.3:
-        print('<.3')
         ball_speed = (ball_speed[0], ball_speed[1]*3)
         draw_all_objects()
         continue
     if ratio > 1:
-        print('>1')
         ball_speed = (ball_speed[0], ball_speed[1]/2)
         draw_all_objects()
         continue
     if abs(ratio - window.get_width()/window.get_height()) < 0.3:
-        print('Diagonal')
         ball_speed = (ball_speed[0]*1.2, ball_speed[1])
         draw_all_objects()
         continue
