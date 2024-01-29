@@ -38,24 +38,33 @@ class Paddle:
                              self.dimensions[0], self.dimensions[1])
                         )
 
-    def collision_wall(self, added_distance: float) -> bool:
+    def collision_wall(self, added_distance: float, index: int) -> bool:
         """
-        Checks if the paddle collides with the top or bottom of the screen
-        :return: True if the paddle collides with the top or bottom of the\
-        screen, False otherwise
+        Checks if the paddle collides with the screen
+        :param added_distance: The distance to add to the paddle position.\
+        To prevent it from moving into the wall because of checking before\
+        movement.
+        :param index: 0 or 1, depending on whether the collision is in the x\
+        or y direction
+        :return: True if the paddle collides with the screen, False otherwise
         """
-        new_y = self.position[1] + added_distance
-        return (new_y <= 0 or
-                new_y+self.dimensions[1] >= self.window.get_height())
+        new_position = self.position[index] + added_distance
+        max_position = (
+            self.window.get_width() if index == 0 else self.window.get_height()
+        )
+        return (new_position <= 0 or
+                new_position+self.dimensions[index] >= max_position)
 
-    def move(self, distance: float) -> None:
+    def move(self, distance: float, index: int = 1) -> None:
         """
         Moves the paddle a given amount y direction as long as that doesn't\
         make it collide witht the walls
-        :param float distance: How much the paddle should move
+        :param distance: How much the paddle should move
+        :param index: 0 or 1, depending on whether the distance should be\
+        added to the x or coordinates
         """
-        if not self.collision_wall(distance):
-            self.position[1] += distance
+        if not self.collision_wall(distance, index):
+            self.position[index] += distance
         self.draw()
 
 
@@ -76,7 +85,6 @@ class Ball:
         self.position = list(position)
         self.window = window
         self.radius = radius
-        self.position = position
         self.color = color
 
         self.draw()
@@ -87,37 +95,36 @@ class Ball:
         """
         pygame.draw.circle(self.window, self.color, self.position, self.radius)
 
-    def collision_paddle(self, paddles: list) -> bool:
+    def collision_paddle(self, paddles: list[Paddle]) -> bool:
         """
         Checks if the ball collides with any of the paddles
         :param list paddles: A list of Paddle objects
         :return: True if the ball collides with any of the paddles, False\
         otherwise
         """
-        return (
-            (
-                self.position[0] < paddles[0].position[0]+paddles[0].dimensions[0]
-                and paddles[0].position[1] < self.position[1]
-                < paddles[0].position[1]+paddles[0].dimensions[1]
-            )
-            or
-            (
-                self.position[0] > paddles[1].position[0]
-                and paddles[1].position[1] < self.position[1]
-                < paddles[1].position[1]+paddles[1].dimensions[1]
-            )
+        for paddle in paddles:
+            collisions = [False, False]
+            for i in range(2):
+                collisions[i] = (
+                    self.position[i] > paddle.position[i] and
+                    self.position[i] < (paddle.position[i]
+                                        + paddle.dimensions[i])
+                )
+            if collisions[0] and collisions[1]:
+                return True
+        return False
 
-        )
-
-    def collision_wall(self) -> bool:
+    def collision_wall(self, index: int = 1) -> bool:
         """
-        Checks if the ball collides with the top or bottom of the screen
+        Checks if the ball collides with the screen
+        :param index: 0 or 1, depending on whether you want to check if it\
+        collides while moving on the x-axis (i.e. with the sides) or the y-axis
         :return: True if the ball collides with the top or bottom of the\
         screen, False otherwise
         """
         return (
-            self.position[1] <= 10 # top
-            or self.position[1] >= self.window.get_height()-10 # bottom
+            self.position[index] <= 10 # top/left
+            or self.position[index] >= self.window.get_height()-10 # btm/right
         )
 
     def move(self, distance: tuple[float, float]) -> None:
