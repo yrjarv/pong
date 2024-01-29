@@ -9,19 +9,19 @@ class Paddle:
     Represents a paddle for the player to move in the game. Ball objects\
     collide with Paddle objects
     """
-    def __init__(self, position: list[float], window,
+    def __init__(self, position: tuple[float], window,
                  dimensions: tuple[float, float] = (20, 100),
                  color: tuple = (255, 255, 255)) -> None:
         """
-        :param list[float] position: Contains the x- and y-values for the\
+        :param position: Contains the x- and y-values for the\
         rectangle to start at, starting at the top left corner of the window
         :param window: A Pygame window to draw the paddles in
-        :param tuple[float] dimensions: Contains respectively the width and\
+        :param dimensions: Contains respectively the width and\
         height of the paddle
-        :param tuple color: The RGB value of the paddle's color, default is\
+        :param color: The RGB value of the paddle's color, default is\
         white
         """
-        self.position = position
+        self.position = list(position)
         self.window = window
         self.dimensions = dimensions
         self.color = color
@@ -63,16 +63,17 @@ class Ball:
     """
     Represents a ball in the game. Ball objects collide with Paddle objects
     """
-    def __init__(self, position: list[float], window, radius: int = 10,
+    def __init__(self, position: tuple[float], window, radius: int = 10,
                  color: tuple = (255, 255, 255)) -> None:
         """
-        :param list[float] position: Contains the x- and y-values for the\
+        :param position: Contains the x- and y-values for the\
         rectangle to start at, starting at the top left corner of the window
         :param window: A Pygame window to draw the ball in
         :param int radius: The radius of the ball
         :param tuple color: The RGB value of the ball's color, default is\
         white
         """
+        self.position = list(position)
         self.window = window
         self.radius = radius
         self.position = position
