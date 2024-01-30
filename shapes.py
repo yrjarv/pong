@@ -122,9 +122,12 @@ class Ball:
         :return: True if the ball collides with the top or bottom of the\
         screen, False otherwise
         """
+        dimension = self.window.get_height()
+        if index == 0:
+            dimension = self.window.get_width()
         return (
-            self.position[index] <= 10 # top/left
-            or self.position[index] >= self.window.get_height()-10 # btm/right
+            self.position[index] <= 20 # top/left
+            or self.position[index] >= dimension-20 # bottom/right
         )
 
     def move(self, distance: tuple[float, float]) -> None:
