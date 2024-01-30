@@ -25,7 +25,7 @@ def random_ball() -> shapes.Ball:
     """
     return shapes.Ball(
         (random.randint(20, WINDOW_DIMENSIONS[0]-20),
-         random.randint(20, WINDOW_DIMENSIONS[1]-20)),
+         random.randint(20, WINDOW_DIMENSIONS[1]//2)),
         window,
         color = (
             random.randint(0, 255),
@@ -40,8 +40,8 @@ def random_ball_speed() -> list[float, float]:
     randomly multiplied by either 1 or -1
     """
     return [
-        random.choice((-BALL_SPEED, BALL_SPEED)),
-        random.choice((-BALL_SPEED, BALL_SPEED))
+        random.choice((-BALL_SPEED, BALL_SPEED))*random.uniform(0.8, 1.2),
+        random.choice((-BALL_SPEED, BALL_SPEED))*random.uniform(0.8, 1.2)
     ]
 
 paddle = shapes.Paddle(
@@ -68,7 +68,7 @@ while not pygame.event.get(pygame.QUIT) and not game_over:
             ball_speeds[i][0] *= -1
         if ball.collision_wall(index=1):
             ball_speeds[i][1] *= -1
-            if ball.position[1] > WINDOW_DIMENSIONS[1]/2:
+            if ball.position[1] > WINDOW_DIMENSIONS[1]-20:
                 game_over = True # pylint: disable=invalid-name
                 break
 
