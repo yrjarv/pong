@@ -98,7 +98,7 @@ class Ball:
     def collision_paddle(self, paddles: list[Paddle]) -> bool:
         """
         Checks if the ball collides with any of the paddles
-        :param list paddles: A list of Paddle objects
+        :param paddles: A list of Paddle objects
         :return: True if the ball collides with any of the paddles, False\
         otherwise
         """
